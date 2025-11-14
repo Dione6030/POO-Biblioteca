@@ -14,6 +14,23 @@ export class Livro implements LivrosDAO {
         this._anoPublicacao = new Date(0);
     }
 
+    get idLivro(): number {
+        return this._idLivro;
+    }
+
+    get titulo(): string {
+        return this._titulo;
+    }
+    get autor(): string {
+        return this._autor;
+    }
+    get ISBN(): string {
+        return this._ISBN;
+    }
+    get anoPublicacao(): Date {
+        return this._anoPublicacao;
+    }
+
     adicionar(livro: Livro): Livro {
         throw new Error("Método não implementado");
     }

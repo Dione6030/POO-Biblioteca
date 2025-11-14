@@ -28,6 +28,10 @@ export class Emprestimo implements EmprestimoDAO {
         this._dataDevolução = data;
     }
 
+    public get idEmprestimo(): number {
+        return this._idEmprestimo;
+    }
+
 
     public adicionar(emprestimo: Emprestimo): Emprestimo {
         throw new Error("Método não implementado");
