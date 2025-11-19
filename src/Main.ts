@@ -115,6 +115,36 @@ async function fluxoAdicionarMembro(): Promise<void> {
         console.error("Erro ao adicionar membro:", e.message ?? e);
     }
 }
+async function imprimirMembros(): Promise<void> {
+    const membros = await Membro.listarTodos();
+    console.log("+-----------------------------------Lista de Membros-----------------------------------+");
+    console.log("|id. |Nome................ |numeroMatricula.. |Endereço.............. |Telefone......... |");
+    for (const m of membros) {
+        console.log(`|${m.idPessoa.toString().padEnd(4)}|${m.nome.padEnd(20)}|${m.numeroMatricula.padEnd(17)}|${m.endereco.padEnd(22)}|${m.telefone.padEnd(17)}|`);
+    }
+    console.log("+-------------------------------------------------------------------------------------+");
+}
+async function fluxoAtualizarMembro(): Promise<void> {
+    await verificarAPI();
+    await imprimirMembros();
+    const id = +teclado("ID do Membro a ser atualizado: ");
+    try {
+        const membro = await Membro.obterPorId(id);
+        console.log("Pressione ENTER para manter o valor atual.");
+        const novoNome = teclado(`Novo nome (${membro.nome}): `);
+        if (novoNome.trim() !== "") membro.nome = novoNome;
+        const novaMatricula = teclado(`Nova matrícula (${membro.numeroMatricula}): `);
+        if (novaMatricula.trim() !== "") membro.numeroMatricula = novaMatricula;
+        const novoEndereco = teclado(`Novo endereço (${membro.endereco}): `);
+        if (novoEndereco.trim() !== "") membro.endereco = novoEndereco;
+        const novoTelefone = teclado(`Novo telefone (${membro.telefone}): `);
+        if (novoTelefone.trim() !== "") membro.telefone = novoTelefone;
+        const atualizado = await atualizarMembro(membro);
+        console.log("Membro atualizado:", atualizado);
+    } catch (e: any) {
+        console.error("Erro na atualização:", e.message ?? e);
+    }
+}
 
 menuPrincipal().catch(err => {
     console.error("Falha fatal:", err);
