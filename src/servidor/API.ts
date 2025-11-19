@@ -137,6 +137,18 @@ export class API {
             throw error;
         }
     }
+    static async buscarMembroPorNome(nomePessoa: string): Promise<any> {
+        try {
+            const membros = await this.makeRequest(`${this.BASE_URL}/membros?nome=${encodeURIComponent(nomePessoa)}`);
+            if (membros.length === 0) {
+                throw new Error(`Membro com nome ${nomePessoa} não encontrado`);
+            }
+            return membros;
+        } catch (error) {
+            console.error(`Erro ao buscar membro com nome ${nomePessoa}:`, error);
+            throw error;
+        }
+    }
 
     static async adicionarMembro(membro: any): Promise<any> {
         try {
