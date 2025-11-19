@@ -1,4 +1,6 @@
 import { EmprestimoDAO } from "../interface/EmprestimoDAO";
+import { API } from "../servidor/API";
+
 
 export class Emprestimo implements EmprestimoDAO {
     private _idEmprestimo: number;
