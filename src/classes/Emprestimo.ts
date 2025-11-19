@@ -34,10 +34,44 @@ export class Emprestimo implements EmprestimoDAO {
         this._dataDevolucao = dataDevolucao;
     }
 
+    static fromDTO(dto: EmprestimoDTO): Emprestimo {
+        const parseDate = (v: string | Date | null): Date | null => {
+            if (v === null) return null;
+            if (v instanceof Date) return v;
+            // suporta 'YYYY-MM-DD' e 'DD/MM/YYYY'
+            if (/^\d{4}-\d{2}-\d{2}/.test(v)) return new Date(v);
+            const m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+            if (m && m.length === 4) {
+                const [, dia, mes, ano] = m as [string, string, string, string];
+                return new Date(Number(ano), Number(mes) - 1, Number(dia));
+            }
+            const d = new Date(v);
+            return isNaN(d.getTime()) ? null : d;
+        };
+        return new Emprestimo(
+            dto.idEmprestimo,
+            dto.idLivro,
+            dto.idPessoa,
+            parseDate(dto.dataEmprestimo) || new Date(),
+            (dto.status as any) ?? 'ativo',
+            parseDate(dto.dataDevolucao)
+        );
     }
 
-    public get idEmprestimo(): number {
-        return this._idEmprestimo;
+    toDTO(): EmprestimoDTO {
+        const fmt = (d: Date | null): string | null => {
+            if (!d) return null;
+            const part = d.toISOString().split('T')[0] || null;
+            return part;
+        };
+        return {
+            idEmprestimo: this._idEmprestimo,
+            idLivro: this._idLivro,
+            idPessoa: this._idPessoa,
+            dataEmprestimo: fmt(this._dataEmprestimo)!,
+            dataDevolucao: fmt(this._dataDevolucao),
+            status: this._status
+        };
     }
 
 
