@@ -61,7 +61,46 @@ async function menuPrincipal(): Promise<void> {
     }
 }
 
+async function menuMembros(): Promise<void> {
+    while (true) {
+        console.log("+-----------Menu de Membros------------+");
+        console.log("|1. Adicionar Membro                   |");
+        console.log("|2. Atualizar Membro                   |");
+        console.log("|3. Remover Membro                     |");
+        console.log("|4. Listar Membros                     |");
+        console.log("|0. Voltar ao Menu Principal           |");
+        console.log("+--------------------------------------+");
+        const escolhaMembro = +teclado("Escolha uma opção: ");
+
+        if (escolhaMembro === 0) {
+            console.log("Voltando ao menu principal...");
             break;
+        }
+
+        switch (escolhaMembro) {
+            case 1: {
+                await fluxoAdicionarMembro();
+                break;
+            }
+            case 2: {
+                await fluxoAtualizarMembro();
+                break;
+            }
+            case 3: {
+                await fluxoRemoverMembro();
+                break;
+            }
+            case 4: {
+                await imprimirMembros();
+                break;
+            }
+            default: {
+                console.error("Opção inválida!");
+                break;
+            }
+        }
+    }
+}
 
 menuPrincipal().catch(err => {
     console.error("Falha fatal:", err);
