@@ -157,6 +157,13 @@ async function fluxoRemoverMembro(): Promise<void> {
         console.error("Erro ao remover:", e.message ?? e);
     }
 }
+async function adicionarMembro(membro: Membro): Promise<Membro> {
+    return (await membro.adicionar(membro)) as Membro;
+}
+async function atualizarMembro(membro: Membro): Promise<Membro> {
+    return (await membro.atualizar(membro)) as Membro;
+}
+
 
 menuPrincipal().catch(err => {
     console.error("Falha fatal:", err);
