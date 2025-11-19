@@ -1,4 +1,6 @@
 import { LivrosDAO } from "../interface/LivrosDAO";
+import { API } from "../servidor/API";
+
 
 export class Livro implements LivrosDAO {
     private _idLivro: number;
