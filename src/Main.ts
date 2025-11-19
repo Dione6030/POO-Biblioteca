@@ -52,7 +52,7 @@ async function menuPrincipal(): Promise<void> {
                 break;
             }
             case 3: {
-                console.log("Funcionalidade de Empréstimos ainda não implementada.");
+                await menuEmprestimos();
                 break;
             }
             default: {
@@ -267,6 +267,30 @@ async function adicionarLivro(livro: Livro): Promise<Livro> {
 }
 async function atualizarLivro(livro: Livro): Promise<Livro> {
     return (await livro.atualizar(livro)) as Livro;
+}
+
+
+async function menuEmprestimos(): Promise<void> {
+    while (true) {
+        console.log("+-------- Menu de Empréstimos --------+");
+        console.log("|1. Registrar Empréstimo             |");
+        console.log("|2. Atualizar Empréstimo             |");
+        console.log("|3. Remover Empréstimo               |");
+        console.log("|4. Listar Empréstimos (todos)       |");
+        console.log("|5. Listar Empréstimos Ativos        |");
+        console.log("|0. Voltar                           |");
+        console.log("+-------------------------------------+");
+        const esc = +teclado("Escolha uma opção: ");
+        if (esc === 0) break;
+        switch (esc) {
+            case 1: await fluxoRegistrarEmprestimo(); break;
+            case 2: await fluxoAtualizarEmprestimo(); break;
+            case 3: await fluxoRemoverEmprestimo(); break;
+            case 4: await imprimirEmprestimos(false); break;
+            case 5: await imprimirEmprestimos(true); break;
+            default: console.error("Opção inválida!");
+        }
+    }
 }
 
 
