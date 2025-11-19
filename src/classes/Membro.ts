@@ -74,7 +74,18 @@ export class Membro extends Pessoa {
         return Membro.daInterface(existente);
     }
 
-    public listar(): Pessoa[] {
-        throw new Error("Método não implementado");
+    public async listar(): Promise<Pessoa[]> {
+        const lista = await API.buscarMembros();
+        return lista.map((m: any) => Membro.daInterface(m));
+    }
+
+    public static async listarTodos(): Promise<Membro[]> {
+        const lista = await API.buscarMembros();
+        return lista.map((m: any) => Membro.daInterface(m));
+    }
+
+    public static async obterPorId(idPessoa: number): Promise<Membro> {
+        const encontrado = await API.buscarMembroPorId(idPessoa);
+        return Membro.daInterface(encontrado);
     }
 }
