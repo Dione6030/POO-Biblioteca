@@ -10,8 +10,20 @@ export interface MembroDTO {
 }
 
 export class Membro extends Pessoa {
-    constructor(idPessoa: number, nome: string, numeroMatricula: string, endereco: string, telefone: string) {
-        super(idPessoa, nome, numeroMatricula, endereco, telefone);
+    constructor(
+        idPessoa: number, 
+        nome: string, 
+        numeroMatricula: string, 
+        endereco: string, 
+        telefone: string
+    ) {
+        super(
+            idPessoa, 
+            nome, 
+            numeroMatricula, 
+            endereco, 
+            telefone
+        );
     }
 
     public static daInterface(dto: MembroDTO): Membro {
