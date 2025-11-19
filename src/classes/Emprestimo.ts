@@ -94,8 +94,9 @@ export class Emprestimo implements EmprestimoDAO {
         return Emprestimo.fromDTO(criado);
     }
 
-    public atualizar(emprestimo: Emprestimo): Emprestimo {
-        throw new Error("Método não implementado");
+    public async atualizar(emprestimo: Emprestimo): Promise<Emprestimo> {
+        const atualizado = await API.atualizarEmprestimo(emprestimo.idEmprestimo, emprestimo.toDTO());
+        return Emprestimo.fromDTO(atualizado);
     }
 
     public remover(idEmprestimo: number): Emprestimo {

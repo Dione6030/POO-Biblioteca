@@ -321,6 +321,24 @@ async function fluxoRegistrarEmprestimo(): Promise<void> {
     }
 }
 
+async function fluxoAtualizarEmprestimo(): Promise<void> {
+    await verificarAPI();
+    await imprimirEmprestimos(false);
+    const id = +teclado("ID do Empréstimo a atualizar: ");
+    try {
+        const atual = await Emprestimo.obterPorId(id);
+        console.log("Pressione ENTER para manter o valor atual.");
+        const novoStatus = teclado(`Novo status (${atual.status}): `);
+        if (novoStatus.trim() !== "") atual.status = novoStatus;
+        const novaDevolucao = teclado(`Nova Data de Devolução (${atual.dataDevolucao ? atual.dataDevolucao.toISOString().split('T')[0] : ''}) (YYYY-MM-DD): `);
+        if (novaDevolucao.trim() !== "") atual.dataDevolucao = new Date(novaDevolucao);
+        const atualizado = await atual.atualizar(atual);
+        console.log("Empréstimo atualizado:", atualizado);
+    } catch (e: any) {
+        console.error("Erro na atualização:", e.message ?? e);
+    }
+}
+
 
 
 menuPrincipal().catch(err => {
