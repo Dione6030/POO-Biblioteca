@@ -45,8 +45,16 @@ export class Membro extends Pessoa {
         this._telefone = telefone;
     }
 
-    public adicionar(pessoa: Pessoa): Pessoa {
-        throw new Error("Método não implementado");
+    public async adicionar(pessoa: Pessoa): Promise<Pessoa> {
+        const dto: MembroDTO = {
+            idPessoa: pessoa.idPessoa,
+            nome: pessoa.nome,
+            numeroMatricula: pessoa.numeroMatricula,
+            endereco: pessoa.endereco,
+            telefone: pessoa.telefone
+        };
+        const criado = await API.adicionarMembro(dto);
+        return Membro.daInterface(criado);
     }
 
     public atualizar(pessoa: Pessoa): Pessoa {
