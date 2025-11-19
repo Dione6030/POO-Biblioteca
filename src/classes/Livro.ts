@@ -1,6 +1,13 @@
 import { LivrosDAO } from "../interface/LivrosDAO";
 import { API } from "../servidor/API";
 
+export interface LivroDTO {
+    _idLivro: number;
+    _titulo: string;
+    _autor: string;
+    _ISBN: string;
+    _anoPublicacao: Date;
+}
 
 export class Livro implements LivrosDAO {
     private _idLivro: number;
@@ -14,6 +21,10 @@ export class Livro implements LivrosDAO {
         this._autor = "";
         this._ISBN = "";
         this._anoPublicacao = new Date(0);
+    }
+
+    static daInterface(dto: LivroDTO): Livro {
+        return new Livro(dto._idLivro, dto._titulo);
     }
 
     get idLivro(): number {
