@@ -305,6 +305,22 @@ async function imprimirEmprestimos(somenteAtivos: boolean): Promise<void> {
     console.log("+---------------------------------------------------------+");
 }
 
+async function fluxoRegistrarEmprestimo(): Promise<void> {
+    await verificarAPI();
+    const idEmprestimo = +teclado("ID do Empréstimo: ");
+    const idLivro = +teclado("ID do Livro: ");
+    const idPessoa = +teclado("ID do Membro (Pessoa): ");
+    const dataStr = teclado("Data do Empréstimo (YYYY-MM-DD): ");
+    const data = new Date(dataStr);
+    const emp = new Emprestimo(idEmprestimo, idLivro, idPessoa, data, 'ativo', null);
+    try {
+        const criado = await emp.adicionar(emp);
+        console.log("Empréstimo registrado:", criado);
+    } catch (e: any) {
+        console.error("Erro ao registrar:", e.message ?? e);
+    }
+}
+
 
 
 menuPrincipal().catch(err => {

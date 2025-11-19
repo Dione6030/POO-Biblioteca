@@ -89,6 +89,9 @@ export class Emprestimo implements EmprestimoDAO {
     get status(): string { return this._status; }
     set status(s: string) { this._status = s; }
 
+    public async adicionar(emprestimo: Emprestimo): Promise<Emprestimo> {
+        const criado = await API.adicionarEmprestimo(emprestimo.toDTO());
+        return Emprestimo.fromDTO(criado);
     }
 
     public atualizar(emprestimo: Emprestimo): Emprestimo {
