@@ -1,0 +1,66 @@
+{
+  "livros": [
+    {
+      "idLivro": 2,
+      "titulo": "A Cortina",
+      "autor": "Lula",
+      "ISBN": "6969696969420",
+      "anoPublicacao": "1969-01-01T03:00:00.000Z",
+      "id": "1c5c"
+    },
+    {
+      "idLivro": 3,
+      "titulo": "1984",
+      "autor": "George Orwell",
+      "ISBN": "9788535914849",
+      "anoPublicacao": "1949-06-08",
+      "id": "c017"
+    },
+    {
+      "id": "e91f",
+      "idLivro": 1,
+      "titulo": "aaaaaaa",
+      "autor": "aaaaaaaa",
+      "ISBN": "6999999999999",
+      "anoPublicacao": "1990-01-01T02:00:00.000Z"
+    }
+  ],
+  "membros": [
+    {
+      "idPessoa": 1,
+      "nome": "João Silva Santos",
+      "numeroMatricula": "2023001",
+      "endereco": "Rua das Flores, 123, São Paulo - SP",
+      "telefone": "(11) 98765-4321",
+      "id": "f1a0"
+    },
+    {
+      "idPessoa": 3,
+      "nome": "Pedro Henrique Lima",
+      "numeroMatricula": "2023003",
+      "endereco": "Rua Augusta, 789, São Paulo - SP",
+      "telefone": "(11) 95555-1234",
+      "id": "5cb6"
+    }
+  ],
+  "emprestimos": [
+    {
+      "idEmprestimo": 2,
+      "idLivro": 2,
+      "idPessoa": 2,
+      "dataEmprestimo": "10/11/2025",
+      "dataDevolucao": null,
+      "status": "ativo",
+      "id": "2708"
+    },
+    {
+      "idEmprestimo": 3,
+      "idLivro": 3,
+      "idPessoa": 3,
+      "dataEmprestimo": "18/11/2025",
+      "dataDevolucao": null,
+      "status": "ativo",
+      "id": "bb7c"
+    }
+  ]
+}
