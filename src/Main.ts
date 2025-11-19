@@ -101,6 +101,20 @@ async function menuMembros(): Promise<void> {
         }
     }
 }
+async function fluxoAdicionarMembro(): Promise<void> {
+    await verificarAPI();
+    const nome = teclado("Nome: ");
+    const numeroMatricula = teclado("Número de Matrícula: ");
+    const endereco = teclado("Endereço: ");
+    const telefone = teclado("Telefone: ");
+    const novoMembro = new Membro(0, nome, numeroMatricula, endereco, telefone);
+    try {
+        const criado = await adicionarMembro(novoMembro);
+        console.log("Membro adicionado com sucesso:", criado);
+    } catch (e: any) {
+        console.error("Erro ao adicionar membro:", e.message ?? e);
+    }
+}
 
 menuPrincipal().catch(err => {
     console.error("Falha fatal:", err);
