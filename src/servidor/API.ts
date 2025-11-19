@@ -16,7 +16,15 @@ export class API {
                 requestInit.body = JSON.stringify(options.body);
             }
 
-            const response = await fetch(url, requestInit);
+            // Fiz uma alteração aqui para ele avisar caso não consiga conectar na API
+            let response: Response;
+            try {
+                response = await fetch(url, requestInit);
+            } catch (e: any) {
+                const hint = `Falha ao conectar à API em ${this.BASE_URL}. Verifique se o JSON Server está rodando (npx json-server --watch db.json --port 3000).`;
+                const message = e?.message ? `${e.message} | ${hint}` : hint;
+                throw new Error(message);
+            }
 
             if (!response.ok) {
                 throw new Error(`Erro HTTP: ${response.status}`);
@@ -279,5 +287,46 @@ export class API {
             console.error(`Erro ao remover empréstimo com ID ${idEmprestimo}:`, error);
             throw error;
         }
+    }
+
+    // Health check avançado: verifica múltiplos recursos, latência e status HTTP.
+    static async healthCheck(options: { timeoutMs?: number; endpoints?: string[]; requireAll?: boolean } = {}): Promise<{
+        ok: boolean;
+        message: string;
+        totalLatencyMs: number;
+        endpoints: Array<{ path: string; ok: boolean; status: number | null; latencyMs: number | null; error?: string }>
+    }> {
+        const { timeoutMs = 2500, endpoints = ['/membros?_limit=1', '/livros?_limit=1', '/emprestimos?_limit=1'], requireAll = false } = options;
+        const startAll = performance?.now ? performance.now() : Date.now();
+        const results: Array<{ path: string; ok: boolean; status: number | null; latencyMs: number | null; error?: string }> = [];
+
+        for (const ep of endpoints) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+            const start = performance?.now ? performance.now() : Date.now();
+            try {
+                const resp = await fetch(`${this.BASE_URL}${ep.startsWith('/') ? ep : '/' + ep}`, { signal: controller.signal });
+                clearTimeout(timer);
+                const end = performance?.now ? performance.now() : Date.now();
+                results.push({ path: ep, ok: resp.ok, status: resp.status, latencyMs: +(end - start).toFixed(1) });
+            } catch (e: any) {
+                clearTimeout(timer);
+                const end = performance?.now ? performance.now() : Date.now();
+                const aborted = e.name === 'AbortError';
+                results.push({ path: ep, ok: false, status: null, latencyMs: +(end - start).toFixed(1), error: aborted ? 'timeout' : (e.message || 'erro') });
+            }
+        }
+
+        const endAll = performance?.now ? performance.now() : Date.now();
+        const totalLatencyMs = +(endAll - startAll).toFixed(1);
+        const allOk = results.every(r => r.ok);
+        const anyOk = results.some(r => r.ok);
+        const ok = requireAll ? allOk : anyOk;
+        let message: string;
+        if (ok && allOk) message = 'Todos os endpoints OK';
+        else if (ok && !allOk) message = 'Parcialmente OK (alguns endpoints falharam)';
+        else message = 'API indisponível (nenhum endpoint respondeu)';
+
+        return { ok, message, totalLatencyMs, endpoints: results };
     }
 }
