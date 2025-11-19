@@ -1,6 +1,14 @@
 import { EmprestimoDAO } from "../interface/EmprestimoDAO";
 import { API } from "../servidor/API";
 
+export interface EmprestimoDTO {
+    idEmprestimo: number;
+    idLivro: number;
+    idPessoa: number;
+    dataEmprestimo: string | Date;
+    dataDevolucao: string | Date | null;
+    status: 'ativo' | 'devolvido' | string;
+}
 
 export class Emprestimo implements EmprestimoDAO {
     private _idEmprestimo: number;
