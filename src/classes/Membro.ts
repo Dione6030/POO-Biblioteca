@@ -68,8 +68,10 @@ export class Membro extends Pessoa {
         return Membro.daInterface(atualizado);
     }
 
-    public remover(idPessoa: number): Pessoa {
-        throw new Error("Método não implementado");
+    public async remover(idPessoa: number): Promise<Pessoa> {
+        const existente = await API.buscarMembroPorId(idPessoa);
+        await API.removerMembro(idPessoa);
+        return Membro.daInterface(existente);
     }
 
     public listar(): Pessoa[] {
