@@ -74,9 +74,21 @@ export class Emprestimo implements EmprestimoDAO {
         };
     }
 
+    get idEmprestimo(): number { return this._idEmprestimo; }
+    get idLivro(): number { return this._idLivro; }
+    set idLivro(v: number) { this._idLivro = v; }
+    get idPessoa(): number { return this._idPessoa; }
+    set idPessoa(v: number) { this._idPessoa = v; }
+    get dataEmprestimo(): Date { return this._dataEmprestimo; }
+    set dataEmprestimo(d: Date) { this._dataEmprestimo = d; }
+    get dataDevolucao(): Date | null { return this._dataDevolucao; }
+    set dataDevolucao(d: Date | null) {
+        if (d && d < this._dataEmprestimo) throw new Error('A devolução não pode ser anterior ao empréstimo');
+        this._dataDevolucao = d;
+    }
+    get status(): string { return this._status; }
+    set status(s: string) { this._status = s; }
 
-    public adicionar(emprestimo: Emprestimo): Emprestimo {
-        throw new Error("Método não implementado");
     }
 
     public atualizar(emprestimo: Emprestimo): Emprestimo {
