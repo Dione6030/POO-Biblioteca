@@ -6,14 +6,24 @@ declare const process: { exit(code?: number): void } | undefined;
 
 const teclado = Prompt();
 
-while (true) {
-    console.log("+------------------Menu------------------+");
-    console.log("|1. Opções de Membros                    |");
-    console.log("|2. Opções de Livros                     |");
-    console.log("|3. Opções de Empréstimos                |");
-    console.log("|0. Sair                                 |");
-    console.log("+----------------------------------------+");
-    const escolha =+ teclado("Escolha uma opção: ");
+async function verificarAPI(): Promise<void> {
+    const check = await API.healthCheck({ requireAll: false });
+    console.log(`HealthCheck: ${check.message} | Latência total: ${check.totalLatencyMs}ms`);
+    for (const ep of check.endpoints) {
+        const statusStr = ep.ok ? `OK (${ep.status})` : `FAIL ${ep.status ?? ''} ${ep.error ?? ''}`;
+        console.log(` - ${ep.path.padEnd(18)} => ${statusStr.padEnd(18)} | ${ep.latencyMs}ms`);
+    }
+    if (!check.ok) {
+        console.error('Alguns endpoints falharam ou todos indisponíveis.');
+        console.log('Dicas: 1) Inicie: npm run dev:api  2) Verifique porta 3000  3) Conexão local liberada');
+        const retry = teclado('Continuar mesmo assim? (s/N): ');
+        if (retry.toLowerCase() !== 's') {
+            if (process) process.exit(1);
+            else throw new Error('Encerrado devido a falha de API');
+        }
+    }
+}
+
 
     if (escolha === 0) {
         console.log("Saindo...");
