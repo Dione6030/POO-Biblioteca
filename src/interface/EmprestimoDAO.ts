@@ -1,9 +1,9 @@
 import { Emprestimo } from "../classes/Emprestimo";
 
 export interface EmprestimoDAO {
-    adicionar(emprestimo: Emprestimo): Emprestimo;
-    atualizar(emprestimo: Emprestimo): Emprestimo;
-    remover(idEmprestimo: number): Emprestimo;
-    listarAtivos(): Emprestimo[];
-    listarTodos(): Emprestimo[];
+    adicionar(emprestimo: Emprestimo): Promise<Emprestimo>;
+    atualizar(emprestimo: Emprestimo): Promise<Emprestimo>;
+    remover(idEmprestimo: number): Promise<Emprestimo>;
+    listarAtivos(): Promise<Emprestimo[]>;
+    listarTodos(): Promise<Emprestimo[]>;
 }
