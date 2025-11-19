@@ -293,6 +293,18 @@ async function menuEmprestimos(): Promise<void> {
     }
 }
 
+async function imprimirEmprestimos(somenteAtivos: boolean): Promise<void> {
+    const lista = somenteAtivos ? await Emprestimo.listarSomenteAtivos() : await Emprestimo.listar();
+    console.log("+---------------------- Empréstimos ----------------------+ ");
+    console.log("|Id  |IdLivro|IdPessoa|Data Emp.  |Devolução  |Status    |");
+    for (const e of lista) {
+        const de = e.dataEmprestimo?.toISOString().split('T')[0] ?? '';
+        const dd = e.dataDevolucao?.toISOString().split('T')[0] ?? '';
+        console.log(`|${e.idEmprestimo.toString().padEnd(4)}|${e.idLivro.toString().padEnd(6)}|${e.idPessoa.toString().padEnd(7)}|${de.padEnd(11)}|${dd.padEnd(11)}|${e.status.padEnd(9)}|`);
+    }
+    console.log("+---------------------------------------------------------+");
+}
+
 
 
 menuPrincipal().catch(err => {

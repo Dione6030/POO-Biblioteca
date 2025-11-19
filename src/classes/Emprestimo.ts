@@ -99,10 +99,28 @@ export class Emprestimo implements EmprestimoDAO {
         throw new Error("Método não implementado");
     }
 
-    public listarAtivos(): Emprestimo[] {
-        throw new Error("Método não implementado");
+    public async listarAtivos(): Promise<Emprestimo[]> {
+        const lista = await API.buscarEmprestimosPorStatus('ativo');
+        return lista.map(Emprestimo.fromDTO);
     }
-    listarTodos(): Emprestimo[] {
-        throw new Error("Método não implementado");
+
+    public async listarTodos(): Promise<Emprestimo[]> {
+        const lista = await API.buscarEmprestimos();
+        return lista.map(Emprestimo.fromDTO);
+    }
+
+    public static async listar(): Promise<Emprestimo[]> {
+        const lista = await API.buscarEmprestimos();
+        return lista.map(Emprestimo.fromDTO);
+    }
+
+    public static async listarSomenteAtivos(): Promise<Emprestimo[]> {
+        const lista = await API.buscarEmprestimosPorStatus('ativo');
+        return lista.map(Emprestimo.fromDTO);
+    }
+
+    public static async obterPorId(idEmprestimo: number): Promise<Emprestimo> {
+        const dto = await API.buscarEmprestimoPorId(idEmprestimo);
+        return Emprestimo.fromDTO(dto);
     }
 }
