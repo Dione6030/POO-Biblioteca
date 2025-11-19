@@ -145,6 +145,18 @@ async function fluxoAtualizarMembro(): Promise<void> {
         console.error("Erro na atualização:", e.message ?? e);
     }
 }
+async function fluxoRemoverMembro(): Promise<void> {
+    await verificarAPI();
+    await imprimirMembros();
+    const id = +teclado("ID do Membro a remover: ");
+    try {
+        const membro = await Membro.obterPorId(id);
+        await membro.remover(id);
+        console.log("Membro removido:", membro.idPessoa);
+    } catch (e: any) {
+        console.error("Erro ao remover:", e.message ?? e);
+    }
+}
 
 menuPrincipal().catch(err => {
     console.error("Falha fatal:", err);
