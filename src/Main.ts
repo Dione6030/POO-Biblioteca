@@ -219,9 +219,34 @@ async function fluxoAdicionarLivro(): Promise<void> {
         console.error("Erro ao adicionar livro:", e.message ?? e);
     }
 }
+async function fluxoAtualizarLivro(): Promise<void> {
+    await verificarAPI();
+    await imprimirLivros();
+    const id = +teclado("ID do livro a ser atualizado: ");
+    try {
+        const livro = await Livro.obterPorId(id);
+        console.log("Pressione ENTER para manter o valor atual.");
+        const novoTitulo = teclado(`Novo Titulo (${livro.titulo}): `);
+        if (novoTitulo.trim() !== "") livro.titulo = novoTitulo;
+        const novoAutor = teclado(`Novo Autor (${livro.autor}): `);
+        if (novoAutor.trim() !== "") livro.autor = novoAutor;
+        const novoISBN = teclado(`Novo ISBN (${livro.ISBN}): `);
+        if (novoISBN.trim() !== "") livro.ISBN = novoISBN;
+        const novoAnoPublicacao = teclado(`Novo Ano de Publicação (${livro.anoPublicacao?.toISOString().split('T')[0] ?? ''}): `);
+        if (novoAnoPublicacao.trim() !== "") livro.anoPublicacao = new Date(novoAnoPublicacao);
+        const atualizado = await atualizarLivro(livro);
+        console.log("livro atualizado:", atualizado);
+    } catch (e: any) {
+        console.error("Erro na atualização:", e.message ?? e);
+    }
+}
 async function adicionarLivro(livro: Livro): Promise<Livro> {
     return (await livro.adicionar(livro)) as Livro;
 }
+async function atualizarLivro(livro: Livro): Promise<Livro> {
+    return (await livro.atualizar(livro)) as Livro;
+}
+
 
 
 menuPrincipal().catch(err => {
