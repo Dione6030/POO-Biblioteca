@@ -2,7 +2,8 @@ import Prompt from "prompt-sync";
 import { Membro } from "./classes/Membro";
 import { API } from "./servidor/API";
 import { Livro } from "./classes/Livro";
-// Declaração mínima de process para evitar erro de tipos caso @types/node não esteja instalado.
+import { Emprestimo } from "./classes/Emprestimo";
+
 declare const process: { exit(code?: number): void } | undefined;
 
 const teclado = Prompt();
