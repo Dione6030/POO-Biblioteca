@@ -103,7 +103,14 @@ export class Livro implements LivrosDAO {
         return listaDTO.map((dto) => Livro.daInterface(dto));
     }
 
-    listar(): Livro[] {
-        throw new Error("Método não implementado");
+    public static async listarTodos(): Promise<Livro[]> {
+        const listaDTO = await API.buscarLivros();
+        return listaDTO.map((dto) => Livro.daInterface(dto));
+    }
+
+    public static async obterPorId(idLivro: number): Promise<Livro> {
+        const dto = await API.buscarLivroPorId(idLivro);
+        if (!dto) throw new Error("Livro não encontrado.");
+        return Livro.daInterface(dto);
     }
 }

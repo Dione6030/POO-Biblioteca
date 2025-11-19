@@ -219,6 +219,15 @@ async function fluxoAdicionarLivro(): Promise<void> {
         console.error("Erro ao adicionar livro:", e.message ?? e);
     }
 }
+async function imprimirLivros(): Promise<void> {
+    const livros = await Livro.listarTodos();
+    console.log("+-----------------------------------Lista de livros-----------------------------------+");
+    console.log("|id. |Titulo................ |Autor.............. |ISBN................. |Ano Publicação... |");
+    for (const m of livros) {
+        console.log(`|${m.idLivro.toString().padEnd(4)}|${m.titulo.padEnd(20)}|${m.autor.padEnd(20)}|${m.ISBN.padEnd(20)}|${(m.anoPublicacao?.toISOString().split('T')[0] ?? '').padEnd(17)}|`);
+    }
+    console.log("+-------------------------------------------------------------------------------------+");
+}
 async function fluxoAtualizarLivro(): Promise<void> {
     await verificarAPI();
     await imprimirLivros();
