@@ -66,8 +66,16 @@ export class Livro implements LivrosDAO {
         this._anoPublicacao = anoPublicacao;
     }
 
-    adicionar(livro: Livro): Livro {
-        throw new Error("Método não implementado");
+    public async adicionar(livro: Livro): Promise<Livro> {
+        const dto: LivroDTO = {
+            _idLivro: livro.idLivro,
+            _titulo: livro.titulo,
+            _autor: livro.autor,
+            _ISBN: livro.ISBN,
+            _anoPublicacao: livro.anoPublicacao
+        }
+        const criado = await API.adicionarLivro(dto);
+        return Livro.daInterface(criado);
     }
 
     atualizar(livro: Livro): Livro {

@@ -205,6 +205,23 @@ async function menuLivro(): Promise<void> {
         }
     }
 }
+async function fluxoAdicionarLivro(): Promise<void> {
+    await verificarAPI();
+    const titulo = teclado("Título: ");
+    const autor = teclado("Autor: ");
+    const ISBN = teclado("ISBN: ");
+    const anoPublicacao = new Date(teclado("Ano de Publicação: "));
+    const novoLivro = new Livro(0, titulo, autor, ISBN, anoPublicacao);
+    try {
+        const criado = await adicionarLivro(novoLivro);
+        console.log("Livro adicionado com sucesso:", criado);
+    } catch (e: any) {
+        console.error("Erro ao adicionar livro:", e.message ?? e);
+    }
+}
+async function adicionarLivro(livro: Livro): Promise<Livro> {
+    return (await livro.adicionar(livro)) as Livro;
+}
 
 
 menuPrincipal().catch(err => {
