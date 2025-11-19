@@ -1,11 +1,21 @@
 import { Pessoa } from "./Pessoa";
+import { API } from "../servidor/API";
+
+export interface MembroDTO {
+    idPessoa: number;
+    nome: string;
+    numeroMatricula: string;
+    endereco: string;
+    telefone: string;
+}
 
 export class Membro extends Pessoa {
     constructor(idPessoa: number, nome: string, numeroMatricula: string, endereco: string, telefone: string) {
         super(idPessoa, nome, numeroMatricula, endereco, telefone);
     }
-    get idPessoa() {
-        return this._idPessoa;
+
+    public static daInterface(dto: MembroDTO): Membro {
+        return new Membro(dto.idPessoa, dto.nome, dto.numeroMatricula, dto.endereco, dto.telefone);
     }
     set nome(nome: string) {
         if (nome.trim() === "" ) throw new Error("Você deve colocar o nome completo");
