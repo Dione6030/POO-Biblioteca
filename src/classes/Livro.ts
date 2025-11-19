@@ -15,16 +15,16 @@ export class Livro implements LivrosDAO {
     private _autor: string;
     private _ISBN: string;
     private _anoPublicacao: Date;
-    constructor(idLivro: number, titulo: string) {
+    constructor(idLivro: number, titulo: string, autor: string, ISBN: string, anoPublicacao: Date) {
         this._idLivro = idLivro;
         this._titulo = titulo;
-        this._autor = "";
-        this._ISBN = "";
-        this._anoPublicacao = new Date(0);
+        this._autor = autor;
+        this._ISBN = ISBN;
+        this._anoPublicacao = anoPublicacao;
     }
 
     static daInterface(dto: LivroDTO): Livro {
-        return new Livro(dto._idLivro, dto._titulo);
+        return new Livro(dto._idLivro, dto._titulo, dto._autor, dto._ISBN, dto._anoPublicacao);
     }
 
     get idLivro(): number {
