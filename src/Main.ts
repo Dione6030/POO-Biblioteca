@@ -47,7 +47,7 @@ async function menuPrincipal(): Promise<void> {
                 break;
             }
             case 2: {
-                console.log("Funcionalidade de Livros ainda não implementada.");
+                await menuLivro();
                 break;
             }
             case 3: {
@@ -163,6 +163,47 @@ async function adicionarMembro(membro: Membro): Promise<Membro> {
 }
 async function atualizarMembro(membro: Membro): Promise<Membro> {
     return (await membro.atualizar(membro)) as Membro;
+}
+
+async function menuLivro(): Promise<void> {
+    while (true) {
+        console.log("+-----------Menu de Livros------------+");
+        console.log("|1. Adicionar Livro                   |");
+        console.log("|2. Atualizar Livro                   |");
+        console.log("|3. Remover Livro                     |");
+        console.log("|4. Listar Livros                     |");
+        console.log("|0. Voltar ao Menu Principal           |");
+        console.log("+--------------------------------------+");
+        const escolhaLivro = +teclado("Escolha uma opção: ");
+
+        if (escolhaLivro === 0) {
+            console.log("Voltando ao menu principal...");
+            break;
+        }
+
+        switch (escolhaLivro) {
+            case 1: {
+                await fluxoAdicionarLivro();
+                break;
+            }
+            case 2: {
+                await fluxoAtualizarLivro();
+                break;
+            }
+            case 3: {
+                await fluxoRemoverLivro();
+                break;
+            }
+            case 4: {
+                await imprimirLivros();
+                break;
+            }
+            default: {
+                console.error("Opção inválida!");
+                break;
+            }
+        }
+    }
 }
 
 
