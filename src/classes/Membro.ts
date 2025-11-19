@@ -57,8 +57,15 @@ export class Membro extends Pessoa {
         return Membro.daInterface(criado);
     }
 
-    public atualizar(pessoa: Pessoa): Pessoa {
-        throw new Error("Método não implementado");
+    public async atualizar(pessoa: Pessoa): Promise<Pessoa> {
+        const dto: Partial<MembroDTO> = {
+            nome: pessoa.nome,
+            numeroMatricula: pessoa.numeroMatricula,
+            endereco: pessoa.endereco,
+            telefone: pessoa.telefone
+        };
+        const atualizado = await API.atualizarMembro(pessoa.idPessoa, dto);
+        return Membro.daInterface(atualizado);
     }
 
     public remover(idPessoa: number): Pessoa {
