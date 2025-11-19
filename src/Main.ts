@@ -240,6 +240,18 @@ async function fluxoAtualizarLivro(): Promise<void> {
         console.error("Erro na atualização:", e.message ?? e);
     }
 }
+async function fluxoRemoverLivro(): Promise<void> {
+    await verificarAPI();
+    await imprimirLivros();
+    const id = +teclado("ID do livro a remover: ");
+    try {
+        const livro = await Livro.obterPorId(id);
+        await livro.remover(id);
+        console.log("livro removido:", livro.idLivro);
+    } catch (e: any) {
+        console.error("Erro ao remover:", e.message ?? e);
+    }
+}
 async function adicionarLivro(livro: Livro): Promise<Livro> {
     return (await livro.adicionar(livro)) as Livro;
 }

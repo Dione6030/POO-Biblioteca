@@ -91,8 +91,16 @@ export class Livro implements LivrosDAO {
     }
 
     
-    remover(idLivro: number): Livro {
-        throw new Error("Método não implementado");
+    public async remover(idLivro: number): Promise<Livro> {
+        const exite = await API.buscarLivroPorId(idLivro);
+        if (!exite) throw new Error("Livro não encontrado para remoção.");
+        await API.removerLivro(idLivro);
+        return Livro.daInterface(exite);
+    }
+
+    public async listar(): Promise<Livro[]> {
+        const listaDTO = await API.buscarLivros();
+        return listaDTO.map((dto) => Livro.daInterface(dto));
     }
 
     listar(): Livro[] {
