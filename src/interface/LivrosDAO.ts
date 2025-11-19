@@ -1,8 +1,8 @@
 import { Livro } from "../classes/Livro";
 
 export interface LivrosDAO {
-    adicionar(livro: Livro): Livro;
-    atualizar(livro: Livro): Livro;
-    remover(idLivro: number): Livro;
-    listar(): Livro[];
+    adicionar(livro: Livro): Promise<Livro>;
+    atualizar(livro: Livro): Promise<Livro>;
+    remover(idLivro: number): Promise<Livro>;
+    listar(): Promise<Livro[]>;
 }
