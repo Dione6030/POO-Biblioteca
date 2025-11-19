@@ -339,6 +339,18 @@ async function fluxoAtualizarEmprestimo(): Promise<void> {
     }
 }
 
+async function fluxoRemoverEmprestimo(): Promise<void> {
+    await verificarAPI();
+    await imprimirEmprestimos(false);
+    const id = +teclado("ID do Empréstimo a remover: ");
+    try {
+        const tmp = await Emprestimo.obterPorId(id);
+        await tmp.remover(id);
+        console.log("Empréstimo removido:", id);
+    } catch (e: any) {
+        console.error("Erro ao remover:", e.message ?? e);
+    }
+}
 
 
 menuPrincipal().catch(err => {

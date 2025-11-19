@@ -99,8 +99,10 @@ export class Emprestimo implements EmprestimoDAO {
         return Emprestimo.fromDTO(atualizado);
     }
 
-    public remover(idEmprestimo: number): Emprestimo {
-        throw new Error("Método não implementado");
+    public async remover(idEmprestimo: number): Promise<Emprestimo> {
+        const existente = await API.buscarEmprestimoPorId(idEmprestimo);
+        await API.removerEmprestimo(idEmprestimo);
+        return Emprestimo.fromDTO(existente);
     }
 
     public async listarAtivos(): Promise<Emprestimo[]> {
