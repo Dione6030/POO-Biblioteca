@@ -12,30 +12,28 @@ export interface EmprestimoDTO {
 
 export class Emprestimo implements EmprestimoDAO {
     private _idEmprestimo: number;
+    private _idLivro: number;
+    private _idPessoa: number;
     private _dataEmprestimo: Date;
-    private _dataDevolução: Date;
+    private _dataDevolucao: Date | null;
+    private _status: 'ativo' | 'devolvido' | string;
 
-    constructor(dataEmprestimo: Date, idEmprestimo: number) {
-        this._dataEmprestimo = dataEmprestimo;
-        this._dataDevolução = new Date(0);
+    constructor(
+        idEmprestimo: number,
+        idLivro: number,
+        idPessoa: number,
+        dataEmprestimo: Date,
+        status: 'ativo' | 'devolvido' | string = 'ativo',
+        dataDevolucao: Date | null = null
+    ) {
         this._idEmprestimo = idEmprestimo;
+        this._idLivro = idLivro;
+        this._idPessoa = idPessoa;
+        this._dataEmprestimo = dataEmprestimo;
+        this._status = status;
+        this._dataDevolucao = dataDevolucao;
     }
 
-    get dataEmprestimo(): Date {
-        return this._dataEmprestimo;
-    }
-    set dataEmprestimo(data: Date) {
-        this._dataEmprestimo = data;
-    }
-
-    public get dataDevolução(): Date {
-        return this._dataDevolução;
-    }
-    public set dataDevolução(data: Date) {
-        if (data < this._dataEmprestimo) {
-            throw new Error("A data de devolução não pode ser anterior à data de empréstimo.");
-        }
-        this._dataDevolução = data;
     }
 
     public get idEmprestimo(): number {
