@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:api": "json-server --watch db.json --port 3000",
+    "dev:cli": "ts-node src/Main.ts"
   },
   "keywords": [],
   "author": "",
@@ -27,5 +29,8 @@
     "url": "https://github.com/Dione6030/POO20252N/issues"
   },
   "homepage": "https://github.com/Dione6030/POO20252N#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "json-server": "^1.0.0-beta.3"
+  }
 }
