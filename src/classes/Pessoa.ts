@@ -9,11 +9,22 @@ export abstract class Pessoa implements PessoaDAO {
         protected _telefone: string
     ) {}
 
-    public abstract adicionar(pessoa: Pessoa): Pessoa;
+    public abstract adicionar(pessoa: Pessoa): Promise<Pessoa>;
 
-    public abstract atualizar(pessoa: Pessoa): Pessoa;
+    public abstract atualizar(pessoa: Pessoa): Promise<Pessoa>;
 
-    public abstract remover(idPessoa: number): Pessoa;
+    public abstract remover(idPessoa: number): Promise<Pessoa>;
 
-    public abstract listar(): Pessoa[];
+    public abstract listar(): Promise<Pessoa[]>;
+
+    public get idPessoa(): number { return this._idPessoa; }
+
+    public get nome(): string { return this._nome; }
+
+    public get numeroMatricula(): string { return this._numeroMatricula; }
+
+    public get endereco(): string { return this._endereco; }
+
+    public get telefone(): string { return this._telefone; }
+    
 }
