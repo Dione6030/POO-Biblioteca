@@ -89,7 +89,7 @@ export class Livro implements LivrosDAO {
             _autor: livro.autor,
             _ISBN: livro.ISBN,
             _anoPublicacao: livro.anoPublicacao
-        }
+        };
         const criado = await API.adicionarLivro(dto);
         return Livro.daInterface(criado);
     }
@@ -101,7 +101,7 @@ export class Livro implements LivrosDAO {
             _autor: livro.autor,
             _ISBN: livro.ISBN,
             _anoPublicacao: livro.anoPublicacao
-        }
+        };
         const atualizado = await API.atualizarLivro(livro.idLivro, dto);
         return Livro.daInterface(atualizado);
     }
