@@ -2,11 +2,12 @@ import { LivrosDAO } from "../interface/LivrosDAO";
 import { API } from "../servidor/API";
 
 export interface LivroDTO {
-    _idLivro: number;
-    _titulo: string;
-    _autor: string;
-    _ISBN: string;
-    _anoPublicacao: Date;
+    _idLivro?: number; idLivro?: number;
+    _titulo?: string; titulo?: string;
+    _autor?: string; autor?: string;
+    _ISBN?: string; ISBN?: string;
+    _anoPublicacao?: string | Date; anoPublicacao?: string | Date;
+    id?: string;
 }
 
 export class Livro implements LivrosDAO {
