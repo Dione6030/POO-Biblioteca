@@ -2,39 +2,57 @@ export class API {
     private static readonly BASE_URL = 'http://localhost:3000';
 
     private static async makeRequest(url: string, options: any = {}): Promise<any> {
+        
+        //Faz com que a API tente até 3 vezes em caso de falha
+        const maxTentativas = 3;
+        const delayAPI = 1000;
+        let lastError: any = null;
 
         if (typeof fetch !== 'undefined') {
-            const requestInit: any = {
-                method: options.method || 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...options.headers
+            for (let attempt = 0; attempt < maxTentativas; attempt++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 10000);
+                    const requestInit: any = {
+                        method: options.method || 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Connection': 'keep-alive',
+                            ...options.headers
+                        },
+                        signal: controller.signal
+                    };
+
+                    if (options.body) {
+                        requestInit.body = JSON.stringify(options.body);
+                    }
+
+                    const response = await fetch(url, requestInit);
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) {
+                        throw new Error(`Erro HTTP: ${response.status}`);
+                    }
+
+                    return await response.json();
+                } catch (error) {
+                    lastError = error;
+                    
+                    if (attempt === 0) {
+                        console.warn(`Primeira tentativa falhou para ${url}. Tentando novamente...`);
+                    } else if (attempt === maxTentativas - 1) {
+                        console.error(`Todas as tentativas falharam para ${url}:`, error);
+                        throw error;
+                    }
+
+                    if (attempt < maxTentativas - 1) {
+                        await new Promise(resolve => setTimeout(resolve, delayAPI));
+                    }
                 }
-            };
-
-            if (options.body) {
-                requestInit.body = JSON.stringify(options.body);
             }
-
-            // Fiz uma alteração aqui para ele avisar caso não consiga conectar na API
-            let response: Response;
-            try {
-                response = await fetch(url, requestInit);
-            } catch (e: any) {
-                const hint = `Falha ao conectar à API em ${this.BASE_URL}. Verifique se o JSON Server está rodando (npx json-server --watch db.json --port 3000).`;
-                const message = e?.message ? `${e.message} | ${hint}` : hint;
-                throw new Error(message);
-            }
-
-            if (!response.ok) {
-                throw new Error(`Erro HTTP: ${response.status}`);
-            }
-
-            return await response.json();
-        } else {
-
-            throw new Error('fetch não está disponível. Use Node.js 18+ ou instale node-fetch.');
         }
+        
+        throw new Error('Fetch não está disponível');
     }
 
     private static async encontrarLivroPorIdLivro(idLivro: number): Promise<any> {
