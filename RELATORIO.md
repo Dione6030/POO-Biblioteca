@@ -1,0 +1,2 @@
+## API feita com auxílio do Copilot, integrando json-server e garantindo com que os dados sejam enviados para database com funções de fetch, rodam em até 3 vezes para garantir com que o sistema consiga enviar os dados com sucessso.
+## Testes feitos com mock da API, simulando os efeitos de mudanças das classes e dos menus pelo Jest, todos os testes validados com sucesso.
