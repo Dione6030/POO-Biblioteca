@@ -25,7 +25,22 @@ export class Livro implements LivrosDAO {
     }
 
     static daInterface(dto: LivroDTO): Livro {
-        return new Livro(dto._idLivro, dto._titulo, dto._autor, dto._ISBN, dto._anoPublicacao);
+        const idLivro = dto._idLivro ?? dto.idLivro ?? 0;
+        const titulo = dto._titulo ?? dto.titulo ?? "";
+        const autor = dto._autor ?? dto.autor ?? "";
+        const ISBN = dto._ISBN ?? dto.ISBN ?? "";
+        const anoRaw = dto._anoPublicacao ?? dto.anoPublicacao;
+        let anoPublicacao: Date;
+        if (anoRaw instanceof Date) {
+            anoPublicacao = anoRaw;
+        } else if (typeof anoRaw === "string" && anoRaw.trim().length > 0) {
+            // Tenta parsear string ISO ou outros formatos
+            const parsed = new Date(anoRaw);
+            anoPublicacao = isNaN(parsed.getTime()) ? new Date() : parsed;
+        } else {
+            anoPublicacao = new Date();
+        }
+        return new Livro(idLivro, titulo, autor, ISBN, anoPublicacao);
     }
 
     get idLivro(): number {
