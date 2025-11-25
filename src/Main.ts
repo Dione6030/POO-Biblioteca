@@ -8,6 +8,34 @@ declare const process: { exit(code?: number): void } | undefined;
 
 const teclado = Prompt();
 
+// Helpers para geração automática de IDs sequenciais
+async function gerarIdLivro(): Promise<number> {
+    const livros = await API.buscarLivros();
+    const max = livros.reduce((m: number, l: any) => {
+        const id = l.idLivro ?? l._idLivro ?? 0;
+        return id > m ? id : m;
+    }, 0);
+    return max + 1;
+}
+
+async function gerarIdMembro(): Promise<number> {
+    const membros = await API.buscarMembros();
+    const max = membros.reduce((m: number, l: any) => {
+        const id = l.idPessoa ?? l._idPessoa ?? 0;
+        return id > m ? id : m;
+    }, 0);
+    return max + 1;
+}
+
+async function gerarIdEmprestimo(): Promise<number> {
+    const emprestimos = await API.buscarEmprestimos();
+    const max = emprestimos.reduce((m: number, e: any) => {
+        const id = e.idEmprestimo ?? e._idEmprestimo ?? 0;
+        return id > m ? id : m;
+    }, 0);
+    return max + 1;
+}
+
 async function verificarAPI(): Promise<void> {
     const check = await API.healthCheck({ requireAll: false });
     console.log(`HealthCheck: ${check.message} | Latência total: ${check.totalLatencyMs}ms`);
@@ -105,11 +133,13 @@ async function menuMembros(): Promise<void> {
 }
 async function fluxoAdicionarMembro(): Promise<void> {
     await verificarAPI();
+    const novoId = await gerarIdMembro();
+    console.log(`Gerando novo ID de membro: ${novoId}`);
     const nome = teclado("Nome: ");
     const numeroMatricula = teclado("Número de Matrícula: ");
     const endereco = teclado("Endereço: ");
     const telefone = teclado("Telefone: ");
-    const novoMembro = new Membro(0, nome, numeroMatricula, endereco, telefone);
+    const novoMembro = new Membro(novoId, nome, numeroMatricula, endereco, telefone);
     try {
         const criado = await adicionarMembro(novoMembro);
         console.log("Membro adicionado com sucesso:", criado);
@@ -208,11 +238,13 @@ async function menuLivro(): Promise<void> {
 }
 async function fluxoAdicionarLivro(): Promise<void> {
     await verificarAPI();
+    const novoId = await gerarIdLivro();
+    console.log(`Gerando novo ID de livro: ${novoId}`);
     const titulo = teclado("Título: ");
     const autor = teclado("Autor: ");
     const ISBN = teclado("ISBN: ");
     const anoPublicacao = new Date(teclado("Ano de Publicação: "));
-    const novoLivro = new Livro(0, titulo, autor, ISBN, anoPublicacao);
+    const novoLivro = new Livro(novoId, titulo, autor, ISBN, anoPublicacao);
     try {
         const criado = await adicionarLivro(novoLivro);
         console.log("Livro adicionado com sucesso:", criado);
@@ -307,7 +339,8 @@ async function imprimirEmprestimos(somenteAtivos: boolean): Promise<void> {
 
 async function fluxoRegistrarEmprestimo(): Promise<void> {
     await verificarAPI();
-    const idEmprestimo = +teclado("ID do Empréstimo: ");
+    const idEmprestimo = await gerarIdEmprestimo();
+    console.log(`Gerando novo ID de empréstimo: ${idEmprestimo}`);
     const idLivro = +teclado("ID do Livro: ");
     const idPessoa = +teclado("ID do Membro (Pessoa): ");
     const dataStr = teclado("Data do Empréstimo (YYYY-MM-DD): ");
