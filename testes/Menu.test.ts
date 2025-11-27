@@ -204,7 +204,7 @@ describe('Testes de Menu e Interface do Usuário', () => {
         _anoPublicacao: "1949-06-08"
       };
 
-      const livro = Livro.daInterface(livroOriginal);
+      const livro = Livro.fromDTO(livroOriginal);
       expect(livro.idLivro).toBe(1);
       expect(livro.titulo).toBe("1984");
       expect(livro.autor).toBe("George Orwell");

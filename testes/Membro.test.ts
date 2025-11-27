@@ -43,7 +43,7 @@ describe('Membro', () => {
         telefone: "(11) 99999-8888"
       };
 
-      const membroFromDTO = Membro.daInterface(dto);
+      const membroFromDTO = Membro.fromDTO(dto);
       
       expect(membroFromDTO.idPessoa).toBe(2);
       expect(membroFromDTO.nome).toBe("Maria Silva");

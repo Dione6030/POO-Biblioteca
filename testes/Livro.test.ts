@@ -38,7 +38,7 @@ describe('Livro', () => {
         _anoPublicacao: "1899-01-01"
       };
 
-      const livroFromDTO = Livro.daInterface(dto);
+      const livroFromDTO = Livro.fromDTO(dto);
       
       expect(livroFromDTO.idLivro).toBe(2);
       expect(livroFromDTO.titulo).toBe("Dom Casmurro");
