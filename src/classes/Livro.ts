@@ -24,7 +24,7 @@ export class Livro implements LivrosDAO {
         this._anoPublicacao = anoPublicacao instanceof Date ? anoPublicacao : new Date();
     }
 
-    static daInterface(dto: LivroDTO): Livro {
+    static fromDTO(dto: LivroDTO): Livro {
         const idLivro = dto._idLivro ?? dto.idLivro ?? 0;
         const titulo = dto._titulo ?? dto.titulo ?? "";
         const autor = dto._autor ?? dto.autor ?? "";
@@ -91,7 +91,7 @@ export class Livro implements LivrosDAO {
             _anoPublicacao: livro.anoPublicacao
         };
         const criado = await API.adicionarLivro(dto);
-        return Livro.daInterface(criado);
+        return Livro.fromDTO(criado);
     }
 
     public async atualizar(livro: Livro): Promise<Livro> {
@@ -103,7 +103,7 @@ export class Livro implements LivrosDAO {
             _anoPublicacao: livro.anoPublicacao
         };
         const atualizado = await API.atualizarLivro(livro.idLivro, dto);
-        return Livro.daInterface(atualizado);
+        return Livro.fromDTO(atualizado);
     }
 
     
@@ -111,22 +111,22 @@ export class Livro implements LivrosDAO {
         const exite = await API.buscarLivroPorId(idLivro);
         if (!exite) throw new Error("Livro não encontrado para remoção.");
         await API.removerLivro(idLivro);
-        return Livro.daInterface(exite);
+        return Livro.fromDTO(exite);
     }
 
     public async listar(): Promise<Livro[]> {
         const listaDTO = await API.buscarLivros();
-        return listaDTO.map((dto) => Livro.daInterface(dto));
+        return listaDTO.map((dto) => Livro.fromDTO(dto));
     }
 
     public static async listarTodos(): Promise<Livro[]> {
         const listaDTO = await API.buscarLivros();
-        return listaDTO.map((dto) => Livro.daInterface(dto));
+        return listaDTO.map((dto) => Livro.fromDTO(dto));
     }
 
     public static async obterPorId(idLivro: number): Promise<Livro> {
         const dto = await API.buscarLivroPorId(idLivro);
         if (!dto) throw new Error("Livro não encontrado.");
-        return Livro.daInterface(dto);
+        return Livro.fromDTO(dto);
     }
 }

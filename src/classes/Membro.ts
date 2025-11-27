@@ -26,7 +26,7 @@ export class Membro extends Pessoa {
         );
     }
 
-    public static daInterface(dto: MembroDTO): Membro {
+    public static fromDTO(dto: MembroDTO): Membro {
         return new Membro(dto.idPessoa, dto.nome, dto.numeroMatricula, dto.endereco, dto.telefone);
     }
 
@@ -66,7 +66,7 @@ export class Membro extends Pessoa {
             telefone: pessoa.telefone
         };
         const criado = await API.adicionarMembro(dto);
-        return Membro.daInterface(criado);
+        return Membro.fromDTO(criado);
     }
 
     public async atualizar(pessoa: Pessoa): Promise<Pessoa> {
@@ -77,27 +77,27 @@ export class Membro extends Pessoa {
             telefone: pessoa.telefone
         };
         const atualizado = await API.atualizarMembro(pessoa.idPessoa, dto);
-        return Membro.daInterface(atualizado);
+        return Membro.fromDTO(atualizado);
     }
 
     public async remover(idPessoa: number): Promise<Pessoa> {
         const existente = await API.buscarMembroPorId(idPessoa);
         await API.removerMembro(idPessoa);
-        return Membro.daInterface(existente);
+        return Membro.fromDTO(existente);
     }
 
     public async listar(): Promise<Pessoa[]> {
         const lista = await API.buscarMembros();
-        return lista.map((m: any) => Membro.daInterface(m));
+        return lista.map((m: any) => Membro.fromDTO(m));
     }
 
     public static async listarTodos(): Promise<Membro[]> {
         const lista = await API.buscarMembros();
-        return lista.map((m: any) => Membro.daInterface(m));
+        return lista.map((m: any) => Membro.fromDTO(m));
     }
 
     public static async obterPorId(idPessoa: number): Promise<Membro> {
         const encontrado = await API.buscarMembroPorId(idPessoa);
-        return Membro.daInterface(encontrado);
+        return Membro.fromDTO(encontrado);
     }
 }
