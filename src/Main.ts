@@ -8,7 +8,6 @@ declare const process: { exit(code?: number): void } | undefined;
 
 const teclado = Prompt();
 
-// Helpers para geração automática de IDs sequenciais
 async function gerarIdLivro(): Promise<number> {
     const livros = await API.buscarLivros();
     const max = livros.reduce((m: number, l: any) => {
@@ -341,7 +340,9 @@ async function fluxoRegistrarEmprestimo(): Promise<void> {
     await verificarAPI();
     const idEmprestimo = await gerarIdEmprestimo();
     console.log(`Gerando novo ID de empréstimo: ${idEmprestimo}`);
+    await imprimirLivros();
     const idLivro = +teclado("ID do Livro: ");
+    await imprimirMembros();
     const idPessoa = +teclado("ID do Membro (Pessoa): ");
     const dataStr = teclado("Data do Empréstimo (YYYY-MM-DD): ");
     const data = new Date(dataStr);
@@ -361,10 +362,31 @@ async function fluxoAtualizarEmprestimo(): Promise<void> {
     try {
         const atual = await Emprestimo.obterPorId(id);
         console.log("Pressione ENTER para manter o valor atual.");
-        const novoStatus = teclado(`Novo status (${atual.status}): `);
-        if (novoStatus.trim() !== "") atual.status = novoStatus;
-        const novaDevolucao = teclado(`Nova Data de Devolução (${atual.dataDevolucao ? atual.dataDevolucao.toISOString().split('T')[0] : ''}) (YYYY-MM-DD): `);
-        if (novaDevolucao.trim() !== "") atual.dataDevolucao = new Date(novaDevolucao);
+        const statusAtual = atual.status;
+        const entradaStatus = teclado(`Novo status (${statusAtual}) [ativo/devolvido]: `).trim().toLowerCase();
+        const novaDevolucaoStr = teclado(`Nova Data de Devolução (${atual.dataDevolucao ? atual.dataDevolucao.toISOString().split('T')[0] : ''}) (YYYY-MM-DD): `).trim();
+
+        if (novaDevolucaoStr !== "") {
+            const novaData = new Date(novaDevolucaoStr);
+            if (isNaN(novaData.getTime())) {
+                console.warn("Data inválida, ignorando atualização da data de devolução.");
+            } else {
+                atual.dataDevolucao = novaData;
+            }
+        }
+
+        const permitidos = ["ativo", "devolvido"];
+        if (entradaStatus !== "") {
+            if (!permitidos.includes(entradaStatus)) {
+                console.warn(`Status '${entradaStatus}' inválido. Mantendo '${statusAtual}'.`);
+            } else {
+                atual.status = entradaStatus;
+            }
+        } else if (novaDevolucaoStr !== "" && statusAtual === "ativo") {
+            // Auto-converte para devolvido se data de devolução adicionada
+            atual.status = "devolvido";
+        }
+
         const atualizado = await atual.atualizar(atual);
         console.log("Empréstimo atualizado:", atualizado);
     } catch (e: any) {
